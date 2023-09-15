@@ -34,6 +34,11 @@ def start_listening():
     # Placeholder for listening post start logic
     status_label.config(text="Listening Post Status: Listening")
 
+# Placeholder for the icon_button_event function
+def icon_button_event():
+    # Add code to handle the icon button click event
+    pass
+
 # 4. Enhance Entry Fields
 command_entry = tk.Entry(root, width=40, font=("Helvetica", 12), bg="#ffffff")
 command_entry.pack()
@@ -44,11 +49,11 @@ icon_button = tk.Button(root, image=icon_image, text="Icon Button", compound="le
 icon_button.image = icon_image  # Store a reference to the image
 icon_button.pack(pady=20)
 
-# Placeholder for the icon_button_event function
-def icon_button_event():
-    # Add code to handle the icon button click event
-    pass
-
 # Run the GUI application
 root.mainloop()
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> b557753af67d36b6d085328978db5101e9d371eb
