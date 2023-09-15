@@ -22,7 +22,7 @@ def send_get_request(command):
         return
 
     # Check for dynamic analysis indicators before sending the request
-    if check_dynamic_analysis(headers):
+    if check_dynamic_analysis():
         result_label.config(text="Dynamic analysis detected. Execution delayed.")
         return
 
@@ -46,7 +46,7 @@ def check_sandbox_artifacts(command):
             return True
     return False
 
-def check_dynamic_analysis(headers):
+def check_dynamic_analysis():
     # Check for indicators of dynamic analysis (customize this check)
     # For example, you can look for the presence of debuggers, virtualized environments, or monitoring tools
     if "debugger" in headers.get('User-Agent', '').lower():
