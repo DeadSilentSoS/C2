@@ -19,6 +19,10 @@ text_color = "#333333"
 
 root.configure(bg=background_color)
 
+# 2. Add Labels and Headings
+main_heading = tk.Label(root, text="Concussion C3 Server", font=("Helvetica", 16, "bold"), bg=primary_color, fg=text_color)
+main_heading.pack(pady=(20, 10))
+
 # Placeholder for the start_server function
 def start_server():
     # Placeholder for server start logic
@@ -27,10 +31,6 @@ def start_server():
 def icon_button_event():
     # Add code to handle the icon button click event
     pass
-
-# 2. Add Labels and Headings
-main_heading = tk.Label(root, text="Concussion C3 Server", font=("Helvetica", 16, "bold"), bg=primary_color, fg=text_color)
-main_heading.pack(pady=(20, 10))
 
 # Create a label for the server status
 status_label = tk.Label(root, text="Server Status: Not Running", bg=background_color)
