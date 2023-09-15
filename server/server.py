@@ -19,6 +19,15 @@ text_color = "#333333"
 
 root.configure(bg=background_color)
 
+# Placeholder for the start_server function
+def start_server():
+    # Placeholder for server start logic
+    status_label.config(text="Server Status: Running")
+
+def icon_button_event():
+    # Add code to handle the icon button click event
+    pass
+
 # 2. Add Labels and Headings
 main_heading = tk.Label(root, text="Concussion C3 Server", font=("Helvetica", 16, "bold"), bg=primary_color, fg=text_color)
 main_heading.pack(pady=(20, 10))
@@ -40,15 +49,6 @@ icon_image = tk.PhotoImage(file="C:/Users/noone/Desktop/Projects/C2/Misc/icon.pn
 icon_button = tk.Button(root, image=icon_image, text="Icon Button", compound="left", bg=primary_color, fg=text_color, command=icon_button_event)
 icon_button.image = icon_image  # Store a reference to the image
 icon_button.pack(pady=20)
-
-# Placeholder for the start_server function
-def start_server():
-    # Placeholder for server start logic
-    status_label.config(text="Server Status: Running")
-
-def icon_button_event():
-    # Add code to handle the icon button click event
-    pass
 
 # Run the GUI application
 root.mainloop()
