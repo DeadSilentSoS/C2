@@ -1,0 +1,11 @@
+widget.configure(bg="your_background_color", fg="your_text_color")
+
+from PIL import Image, ImageTk
+# Load an image
+image = Image.open("your_icon.png")
+# Convert the image to a format that Tkinter can use
+tk_image = ImageTk.PhotoImage(image)
+
+# Create a label or button with the image
+image_label = customtkinter.CTkLabel(self, image=tk_image)
+image_label.grid(row=0, column=0)

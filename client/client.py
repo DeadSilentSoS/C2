@@ -1,88 +1,91 @@
-import requests
-import random
-import time
-import gzip
-import io
 import tkinter as tk
-import customtkinter  # Import the custom GUI library
+import socket
+import threading
 
-# List of known sandbox artifacts (customize this list)
-sandbox_artifacts = ["sandbox_file.exe", "sandbox_reg_key"]
+# Define the server's IP address and port
+HOST = '127.0.0.1'
+PORT = 8080
 
-# Define the C2 server address and port (replace with your server's IP and port)
-C2_SERVER = "http://127.0.0.1:8080"
+# Create the main application window
+root = tk.Tk()
+root.title("Concussion C2 Client")
+root.geometry("400x300")  # Adjust the window size as needed
 
-def send_get_request(command):
-    # Introduce a randomized delay before sending GET requests
-    randomized_delay()
+# 1. Use a Consistent Color Scheme
+primary_color = "#3498db"
+secondary_color = "#2ecc71"
+background_color = "#f2f2f2"
+text_color = "#333333"
 
-    # Check for known sandbox artifacts before sending the request
-    if check_sandbox_artifacts(command):
-        result_label.config(text="Known sandbox artifacts detected. Execution delayed.")
-        return
+root.configure(bg=background_color)
 
-    # Check for dynamic analysis indicators before sending the request
-    if check_dynamic_analysis():
-        result_label.config(text="Dynamic analysis detected. Execution delayed.")
-        return
+# 2. Add Labels and Headings
+main_heading = tk.Label(root, text="Concussion C2 Client", font=("Helvetica", 16, "bold"), bg=primary_color, fg=text_color)
+main_heading.pack(pady=(20, 10))
 
-    # Send an HTTP GET request to the C2 server with custom headers and variable content length
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
-        'X-Custom-Header': 'MyCustomValue',  # Add your custom header here
-        'Content-Length': str(random.randint(50, 500))  # Random content length
-    }
+# Create a label for the server connection status
+status_label = tk.Label(root, text="Server Status: Not Connected", bg=background_color)
+status_label.pack(pady=10)
 
-    try:
-        response = requests.get(f"{C2_SERVER}/{command}", headers=headers, timeout=10)
-        result_label.config(text=decompress_response(response.content))
-    except requests.exceptions.RequestException as e:
-        result_label.config(text=str(e))
-
-def check_sandbox_artifacts(command):
-    # Check for known sandbox artifacts in the received command
-    for artifact in sandbox_artifacts:
-        if artifact in command:
-            return True
-    return False
-
-def check_dynamic_analysis():
-    # Check for indicators of dynamic analysis (customize this check)
-    # For example, you can look for the presence of debuggers, virtualized environments, or monitoring tools
-    if "debugger" in headers.get('User-Agent', '').lower():
-        return True
-    return False
-
-def randomized_delay():
-    # Introduce a random delay before sending a request (customize this delay)
-    time.sleep(random.uniform(1, 5))
-
-def decompress_response(response):
-    # Decompress the response using gzip
-    with gzip.GzipFile(fileobj=io.BytesIO(response), mode='rb') as f:
-        decompressed_data = f.read()
-    return decompressed_data.decode('utf-8')
-
-def execute_command():
-    command = command_entry.get()
-    if command:
-        send_get_request(command)
-
-# Create a Tkinter window using the custom GUI library
-window = customtkinter.CTk()
-window.title("Concussion C2 Client")
-
-# Create a label for displaying results
-result_label = customtkinter.CTkLabel(window, text="", wraplength=400)
-result_label.pack()
-
-# Create an entry field for entering commands
-command_entry = customtkinter.CTkEntry(window, width=50, placeholder_text="Enter your command")
+# Create an entry field for user input
+command_var = tk.StringVar()  # Create a StringVar to hold the entry text
+command_var.set("Enter your command")  # Set the default text
+command_entry = tk.Entry(root, width=40, font=("Helvetica", 12), bg="#ffffff", textvariable=command_var)
 command_entry.pack()
 
-# Create a button to execute commands
-execute_button = customtkinter.CTkButton(window, text="Execute", command=execute_command)
-execute_button.pack()
+# Placeholder for the send_command function
+def send_command():
+    command = command_var.get()  # Get the text from the entry
+    if command and command != "Enter your command":  # Check if it's not empty or the default text
+        # Add code to send the command to the server
+        status_label.config(text="Server Status: Command Sent")
 
-if __name__ == "__main__":
-    window.mainloop()
+# 3. Improve Button Styling
+send_button = tk.Button(root, text="Send Command", bg=secondary_color, fg=text_color, command=send_command)
+send_button.pack()
+
+# Function to handle individual client connections
+def handle_client(client_socket):
+    while True:
+        # Receive a command from the client
+        command = client_socket.recv(1024).decode('utf-8')
+
+        if not command:
+            break
+
+
+        # Process the received command (e.g., execute it)
+        # Add your command processing logic here
+
+        # Send the response back to the client
+        response = "Response to the command"
+        client_socket.send(response.encode('utf-8'))
+
+    # Remove the client from the dictionary when disconnected
+    del clients[client_socket]
+    client_socket.close()
+
+# Create a socket and start listening for incoming connections
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((HOST, PORT))
+server_socket.listen()
+
+print(f"C2 Server is listening on {HOST}:{PORT}")
+
+# Dictionary to store connected clients and their handlers
+clients = {}
+
+def start_server():
+    while True:
+        # Accept incoming client connections
+        client_socket, client_address = server_socket.accept()
+        print(f"Connected to client at {client_address}")
+
+        # Add the client to the dictionary and start a handler thread
+        clients[client_socket] = threading.Thread(target=handle_client, args=(client_socket,))
+        clients[client_socket].start()
+
+# ... (Rest of the GUI code)
+
+# Run the GUI application
+root.mainloop()
