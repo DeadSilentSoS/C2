@@ -12,10 +12,10 @@ root.title("Concussion C2 Client")
 root.geometry("400x300")  # Adjust the window size as needed
 
 # 1. Use a Consistent Color Scheme
-primary_color = "#3498db"
+primary_color = "#000098"
 secondary_color = "#2ecc71"
 background_color = "#000080"
-text_color = "#333333"
+text_color = "#ffffff"
 
 root.configure(bg=background_color)
 
