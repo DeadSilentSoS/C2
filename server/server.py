@@ -18,8 +18,13 @@ root.geometry("400x300")  # Adjust the window size as needed
 primary_color = "#f2f2f2"
 secondary_color = "#2ecc71"
 background_color = "#000098"
+<<<<<<< HEAD
 text_color = "#ffffff"
 tk.Canvas = bgcolor= "primary_color"
+=======
+text_color = "#333333"
+
+>>>>>>> ade591f42585e226ba9406efc234a594f1aa9082
 root.configure(bg=background_color)
 
 # 2. Add Labels and Headings
@@ -48,7 +53,7 @@ command_entry = tk.Entry(root, width=40, font=("Helvetica", 12), bg="#ffffff")
 command_entry.pack()
 
 # 5. Incorporate Icons (Replace with your icon path)
-icon_image = tk.PhotoImage(file="C:/Users/noone/Desktop/Projects/C2/Misc/icon.png")
+icon_image = tk.PhotoImage(file="/home/noone/Desktop/Projects/C2/Misc/icon.png")
 icon_button = tk.Button(root, image=icon_image, text="Icon Button", compound="left", bg=primary_color, fg=text_color, command=icon_button_event)
 icon_button.image = icon_image  # Store a reference to the image
 icon_button.pack(pady=20)
