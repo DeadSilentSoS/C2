@@ -1,6 +1,9 @@
+from ctypes.wintypes import RGB
+from curses import COLOR_BLUE
 import tkinter as tk
 import socket
 import threading
+from turtle import bgcolor
 
 # Define the server's IP address and port
 HOST = '127.0.0.1'
@@ -8,15 +11,15 @@ PORT = 8080
 
 # Create the main application window
 root = tk.Tk()
-root.title("Concussion C3 Server")
+root.title("Concussion C3 Server", bgcolor(COLOR_BLUE(RGB(100,100,100))))
 root.geometry("400x300")  # Adjust the window size as needed
 
 # 1. Use a Consistent Color Scheme
-primary_color = "#3498db"
+primary_color = "#f2f2f2"
 secondary_color = "#2ecc71"
-background_color = "#000080"
-text_color = "#333333"
-
+background_color = "#000098"
+text_color = "#ffffff"
+tk.Canvas = bgcolor= "primary_color"
 root.configure(bg=background_color)
 
 # 2. Add Labels and Headings
