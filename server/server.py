@@ -18,13 +18,11 @@ root.geometry("400x300")  # Adjust the window size as needed
 primary_color = "#f2f2f2"
 secondary_color = "#2ecc71"
 background_color = "#000098"
-<<<<<<< HEAD
+
 text_color = "#ffffff"
 tk.Canvas = bgcolor= "primary_color"
-=======
 text_color = "#333333"
 
->>>>>>> ade591f42585e226ba9406efc234a594f1aa9082
 root.configure(bg=background_color)
 
 # 2. Add Labels and Headings
