@@ -1,8 +1,8 @@
 from ctypes.wintypes import RGB
-from curses import COLOR_BLUE
 import tkinter as tk
 import socket
 import threading
+from tkinter import colorchooser
 from turtle import bgcolor
 
 # Define the server's IP address and port
@@ -11,7 +11,7 @@ PORT = 8080
 
 # Create the main application window
 root = tk.Tk()
-root.title("Concussion C3 Server", bgcolor(COLOR_BLUE(RGB(100,100,100))))
+root.title("Concussion C3 Server", bgcolor(0, 250, 275))
 root.geometry("400x300")  # Adjust the window size as needed
 
 # 1. Use a Consistent Color Scheme
@@ -29,6 +29,7 @@ root.configure(bg=background_color)
 main_heading = tk.Label(root, text="Concussion C2 Server", font=("Helvetica", 16, "bold"), bg=primary_color, fg=text_color)
 main_heading.pack(pady=(20, 10))
 
+def 
 # Placeholder for the start_server function
 def start_server():
     # Placeholder for server start logic
