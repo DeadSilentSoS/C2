@@ -11,7 +11,7 @@ PORT = 8080
 
 # Create the main application window
 root = tk.Tk()
-root.title("Concussion C3 Server", bgcolor(0, 250, 275))
+root.title("Concussion C3 Server", bgcolor(0, 250, 255))
 root.geometry("400x300")  # Adjust the window size as needed
 
 # 1. Use a Consistent Color Scheme
