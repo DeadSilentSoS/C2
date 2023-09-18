@@ -29,7 +29,6 @@ root.configure(bg=background_color)
 main_heading = tk.Label(root, text="Concussion C2 Server", font=("Helvetica", 16, "bold"), bg=primary_color, fg=text_color)
 main_heading.pack(pady=(20, 10))
 
-def 
 # Placeholder for the start_server function
 def start_server():
     # Placeholder for server start logic
